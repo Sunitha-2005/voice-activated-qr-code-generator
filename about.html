@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center;
+            background-color: #1fbddc;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #333;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-between; /* Space between left and right items */
+            align-items: center; /* Center items vertically */
+        }
+
+        nav ul li {
+            margin: 0 15px;
+            display: flex;
+            align-items: center; /* Align items in the li horizontally and vertically */
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
+        }
+
+        nav ul li a:hover {
+            background-color: #575757;
+        }
+
+        #qrCodeContainer {
+            text-align: center;
+            background-color: rgb(230, 236, 238);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px; /* Added margin to separate from nav */
+        }
+
+        input, select {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .content {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li>
+                <a href="index.html">QR Code Generator</a>
+            </li>
+            <div style="display: flex;">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+            </div>
+        </ul>
+    </nav>
+    <div class="content">
+        <h1>About Us</h1>
+        <p>This is the about page content.</p>
+    </div>
+    <div id="qrCodeContainer">
+        <h2>QR Code Generator</h2>
+        <p>Enter the URL and select the color for your QR code:</p>
+        <input type="text" id="url" placeholder="Enter URL" />
+        <label for="color">Choose QR Code Color:</label>
+        <input type="color" id="color" value="#000000" />
+        <button onclick="generateQRCode()">Generate</button>
+        <div id="qrCode"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <script>
+        function generateQRCode() {
+            const url = document.getElementById('url').value;
+            const color = document.getElementById('color').value;
+            const qrCodeContainer = document.getElementById('qrCode');
+
+            if (!url) {
+                alert("Please enter a URL.");
+                return;
+            }
+
+            qrCodeContainer.innerHTML = ''; // Clear previous QR code
+            QRCode.toCanvas(document.createElement('canvas'), url, {
+                color: {
+                    dark: color, // Dark color for QR code
+                    light: "#FFFFFF" // Light color for background
+                }
+            }, function (error, canvas) {
+                if (error) {
+                    console.error(error);
+                } else {
+                    qrCodeContainer.appendChild(canvas); // Append the generated QR code to the container
+                }
+            });
+        }
+    </script>
+</body>
+</html>

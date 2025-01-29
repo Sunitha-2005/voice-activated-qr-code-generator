@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Welcome to our QR Code Generator. Create customized QR codes quickly and easily.">
+    <meta name="keywords" content="QR Code, QR Code Generator, Free QR Code">
+    <meta name="author" content="Your Company Name">
+    <title>Home - QR Code Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center;
+            background-color: #1fbddc;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #333;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-between; /* Space between left and right items */
+            align-items: center; /* Center items vertically */
+        }
+
+        nav ul li {
+            margin: 0 15px;
+            display: flex;
+            align-items: center; /* Align items in the li horizontally and vertically */
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
+        }
+
+        nav ul li a:hover {
+            background-color: #575757;
+        }
+
+        #qrCodeContainer {
+            text-align: center;
+            background-color: rgb(230, 236, 238);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px; /* Added margin to separate from nav */
+        }
+
+        input, select {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .content {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav ul li {
+                margin: 5px 0;
+            }
+        }
+
+        #qrCodeVoiceContainer {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li>
+                <a href="index.html" aria-label="QR Code Generator">QR Code Generator</a>
+            </li>
+            <div style="display: flex;">
+                <li><a href="index.html" aria-label="Home">Home</a></li>
+                <li><a href="about.html" aria-label="About">About</a></li>
+                <li><a href="services.html" aria-label="Services">Services</a></li>
+            </div>
+        </ul>
+    </nav>
+    <div class="content">
+        <h1>Welcome to QR Code Generator</h1>
+        <p>Create customized QR codes quickly and easily</p>
+    </div>
+    <h1>Voice Activated QR Code Generator</h1>
+    <button id="start-button">Start Voice Input</button>
+    <div id="qrCode"></div>
+
+    <!-- Include the QR Code library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const startButton = document.getElementById('start-button');
+            const qrCodeContainer = document.getElementById('qrCode');
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+
+            let recognitionActive = false;
+
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = function (event) {
+                const transcript = event.results[0][0].transcript;
+                generateQRCode(transcript);
+            };
+
+            recognition.onerror = function (event) {
+                console.error('Speech recognition error:', event.error);
+            };
+
+            recognition.onend = function () {
+                recognitionActive = false;
+            };
+
+            startButton.addEventListener('click', function () {
+                if (!recognitionActive) {
+                    recognition.start();
+                    recognitionActive = true;
+                } else {
+                    console.warn('Speech recognition is already running.');
+                }
+            });
+
+            function generateQRCode(text) {
+                qrCodeContainer.innerHTML = '';  // Clear previous QR code
+                new QRCode(qrCodeContainer, {
+                    text: text,
+                    width: 256,
+                    height: 256,
+                });
+            }
+        });
+    </script>
+</body>
+</html>
